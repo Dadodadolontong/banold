@@ -91,13 +91,16 @@ doc_events = {
      "Sales Order": {
 	 "validate": "ban.api.test"
      },
-      "user": {
+     "user": {
          "validate": "ban.api.test"
      },	
-      "Production Order": {
+     "Production Order": {
          "validate": "ban.api.check_batch",
          "on_submit": "ban.api.production_order_on_submit"
-     }	
+     },
+	 "Stock Entry": {
+	     "before_save": "ban.api.calc_rate"
+	 }
 }
 
 # Scheduled Tasks
