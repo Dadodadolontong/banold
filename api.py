@@ -52,7 +52,7 @@ def calc_rate(doc, method):
 	im_cost = 0.0
 	
 	for d in doc.get('items'):
-		if !d.t_warehouse:
+		if not d.t_warehouse:
 		   item_cat = frappe.get_doc('Item',d.item).item_group
 		   
 		   if item_cat == "Raw Material":
