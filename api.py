@@ -26,7 +26,7 @@ def production_order_on_submit(doc, method):
                 "doctype":"Batch",
                 "batch_id":doc.batch_no,
                 "item":"IM-ALNWIP-00",
-                "expiry_date":doc.planned_start_date}).insert()
+                "expiry_date":frappe.utils.data.add_years(doc.planned_start_date,2)}).insert()
 
         sch = frappe.get_doc({
                 "doctype":"Batch",
