@@ -42,21 +42,23 @@ def calc_rate(doc, method):
 	
 	from frappe.utils import flt
 	
-	if self.purpose in ["Manufacture", "Repack"]:
+	if doc.purpose in ["Manufacture", "Repack"]:
 	
 		rm_material_cost = 0.0
 		pm_material_cost = 0.0
 		rm_qty = 0.0
 		rm_rate = 0.0
 		pm_qty = 0.0
-		im_qty = 0.0
+		scrap_qty = 0.0
 		fg_qty = 0.0
 		fg_cost = 0.0
 		im_cost = 0.0
 		
+		prd_qty = frappe.get_doc('Production Order',doc.production_order).qty
+		
 		for d in doc.get('items'):
 			if not d.t_warehouse:
-			   item_cat = frappe.get_doc('Item',d.item).item_group
+			   item_cat = frappe.get_doc('Item',d.item_code).item_group
 			   
 			   if item_cat == "Raw Material":
 					rm_material_cost += flt(d.basic_amount)
@@ -66,27 +68,29 @@ def calc_rate(doc, method):
 					pm_qty += flt(d.qty)
 			else:	  
 				if frappe.get_doc('Production Order',doc.production_order).scrap_warehouse == d.t_warehouse:
-					#Scrap item
-					im_qty += flt(d.qty)
+					#Scrap item --> Sachet nya
+					scrap_qty += flt(d.qty)
 			   
 				if frappe.get_doc('Production Order',doc.production_order).fg_warehouse == d.t_warehouse:
-					#fg item
+					#fg item --> Sisa cair nya
 					fg_qty += flt(d.qty)
 		
-		if rm_qty:	
-			rm_rate = rm_material_cost / rm_qty
+		#Hitung cost sachet: (rm_material_cost + pm_material_cost - sisa fg_qty*rate) / im_qty
 		
-		if fg_qty:
-			fg_rate = (rm_material_cost - im_cost + pm_material_cost)/fg_qty
+		rm_rate = rm_material_cost / prd_qty 
+		
+		scrap_rate = (rm_material_cost + pm_material_cost - (rm_rate*fg_qty))/scrap_qty
 		
 		for d in doc.get('items'):
 			if d.t_warehouse:
 				if frappe.get_doc('Production Order',doc.production_order).scrap_warehouse == d.t_warehouse:
 					#Scrap item
-					d.basic_rate = rm_rate
-					d.basic_amount = rm_rate * d.qty
+					d.basic_rate = scrap_rate_rate
+					d.basic_amount = scrap_rate * d.qty
 			   
 				if frappe.get_doc('Production Order',doc.production_order).fg_warehouse == d.t_warehouse:
 					#fg item
-					d.basic_rate = fg_rate
-					d.basic_amount = fg_rate * d.qty
+					d.basic_rate = rm_rate
+					d.basic_amount = rm_rate * d.qty
+					
+		doc.set_total_incoming_outgoing_value()
