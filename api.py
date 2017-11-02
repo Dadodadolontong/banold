@@ -93,7 +93,7 @@ def calc_rate(doc, method):
 		for d in doc.get('items'):
 			if d.t_warehouse:
 			    
-				d.batch_no = frappe.db.get_value('Batch',{"reference_name":batch_no,"item":d,item_code},"name")
+				d.batch_no = frappe.db.get_value('Batch',{"reference_name":batch_no,"item":d.item_code},"name")
 				
 				if frappe.get_doc('Production Order',doc.production_order).scrap_warehouse == d.t_warehouse:
 					#Scrap item
