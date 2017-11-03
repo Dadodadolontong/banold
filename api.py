@@ -50,7 +50,7 @@ def calc_rate(doc, method):
 	
 	from frappe.utils import flt
 	
-	if (doc.purpose in ["Manufacture", "Repack"]) and (frappe.db.get_value('BOM',{'name':se.bom_no},'custom_costing')):
+	if (doc.purpose in ["Manufacture", "Repack"]) and (frappe.db.get_value('BOM',{'name':doc.bom_no},'custom_costing')):
 	
 		rm_material_cost = 0.0
 		pm_material_cost = 0.0
