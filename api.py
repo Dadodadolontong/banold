@@ -69,12 +69,12 @@ def calc_rate(doc, method):
 			if not d.t_warehouse:
 			   item_cat = frappe.get_doc('Item',d.item_code).item_group
 			   
-			   if item_cat == "Raw Material":
-					rm_material_cost += flt(d.basic_amount)
-					rm_qty += flt(d.qty)
-			   else:
+			   if item_cat == "Packaging":				
 					pm_material_cost += flt(d.basic_amount)
 					pm_qty += flt(d.qty)
+			   else:
+					rm_material_cost += flt(d.basic_amount)
+					rm_qty += flt(d.qty)
 			else:	  
 				if frappe.get_doc('Production Order',doc.production_order).scrap_warehouse == d.t_warehouse:
 					#Scrap item --> Sachet nya
