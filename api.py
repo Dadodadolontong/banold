@@ -37,14 +37,14 @@ def production_order_on_submit(doc, method):
                 "batch_id":doc.batch_no+"-B",
                 "item":"IM-ALNWIP-00",
                 "expiry_date":frappe.utils.data.add_years(doc.planned_start_date,2),
-				"reference_name":doc.batch_no}).insert()
+				"batch_group":doc.batch_no}).insert()
 
         sch = frappe.get_doc({
                 "doctype":"Batch",
                 "batch_id":doc.batch_no+"-S",
                 "item":"FG-ALNSCH-00",
                 "expiry_date":frappe.utils.data.add_years(doc.planned_start_date,2),
-				"reference_name":doc.batch_no}).insert()
+				"batch_group":doc.batch_no}).insert()
 
 def calc_rate(doc, method):
 	
@@ -93,7 +93,7 @@ def calc_rate(doc, method):
 		for d in doc.get('items'):
 			if d.t_warehouse:
 			    
-				d.batch_no = frappe.db.get_value('Batch',{"reference_name":batch_no,"item":d.item_code},"name")
+				d.batch_no = frappe.db.get_value('Batch',{"batch_group":batch_no,"item":d.item_code},"name")
 				
 				if frappe.get_doc('Production Order',doc.production_order).scrap_warehouse == d.t_warehouse:
 					#Scrap item
