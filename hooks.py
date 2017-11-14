@@ -88,14 +88,7 @@ app_license = "MIT"
 # }
 
 doc_events = {
-     "Sales Order": {
-	 "validate": "ban.api.test"
-     },
-     "user": {
-         "validate": "ban.api.test"
-     },	
      "Production Order": {
-         "validate": "ban.api.check_batch",
          "on_submit": "ban.api.production_order_on_submit"
      },
 	 "Stock Entry": {
