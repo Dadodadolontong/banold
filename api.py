@@ -99,10 +99,12 @@ def calc_rate(doc, method):
 					#Scrap item
 					d.basic_rate = scrap_rate
 					d.basic_amount = scrap_rate * d.qty		
-			   
+					d.amount = d.basic_amount
+					
 				if frappe.get_doc('Production Order',doc.production_order).fg_warehouse == d.t_warehouse:
 					#fg item
 					d.basic_rate = rm_rate
 					d.basic_amount = rm_rate * d.qty
+					d.amount = d.basic_amount
 					
 		doc.set_total_incoming_outgoing_value()
