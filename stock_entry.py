@@ -662,7 +662,8 @@ class StockEntry(StockController):
 	#			and se.production_order= %s and ifnull(sed.t_warehouse, '') != ''
 	#		group by sed.item_code, sed.t_warehouse
 	#	""", self.production_order, as_dict=1)
-		transferred_materials = frappe.db.sql("""
+#Didi, tambahkan batch_no
+	transferred_materials = frappe.db.sql("""
 			select
 				item_name, item_code, qty as qty, sed.batch_no, sed.t_warehouse as warehouse,
 				description, stock_uom, expense_account, cost_center
@@ -705,13 +706,14 @@ class StockEntry(StockController):
 					if d.get(item.warehouse):
 						qty-= d.get(item.warehouse)
 
+#Didi, tambahkan batch_no						
 			if qty > 0:
 				self.add_to_stock_entry_detail({
 					item.item_code: {
 						"from_warehouse": item.warehouse,
 						"to_warehouse": "",
 						"qty": qty,
-						"batch_no": item.batch_no,
+						"batch_no": item.batch_no, 
 						"item_name": item.item_name,
 						"description": item.description,
 						"stock_uom": item.stock_uom,
@@ -784,7 +786,8 @@ class StockEntry(StockController):
 			se_child.uom = stock_uom
 			se_child.stock_uom = stock_uom
 			se_child.qty = flt(item_dict[d]["qty"])
-                        se_child.batch_no = item_dict[d].get("batch_no")
+#Didi, tambahkan batch_no
+            se_child.batch_no = item_dict[d].get("batch_no")
 			se_child.expense_account = item_dict[d].get("expense_account") or expense_account
 			se_child.cost_center = item_dict[d].get("cost_center") or cost_center
 
