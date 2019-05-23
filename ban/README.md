@@ -1,6 +1,6 @@
 ## Ban
 
-BAN Extension
+BAN Extension 1.0
 
 #### License
 
